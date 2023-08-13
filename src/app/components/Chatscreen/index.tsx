@@ -7,9 +7,11 @@ import { useMessageConnection } from '@/app/hook/useMessageConnection';
 
 export function Chatwindow() {
     const [message, setMessage] = useState('');
+    const [disabled, setDisabled] = useState(false);
     const [messageFlow, setMessageFlow] = useState<JSX.Element[]>([]);
 
     async function handleSendMessage() {
+        setDisabled(true);
         const keyUserMessage = new Date().getTime();
         setMessageFlow((state) => [...state, <MessageBox key={keyUserMessage} originMessage='user-message' message={message} />]);
         setMessage('');
@@ -20,6 +22,7 @@ export function Chatwindow() {
         const keyBotMessage = new Date().getTime();
 
         setMessageFlow((state) => [...state, <MessageBox key={keyBotMessage} originMessage='bot-message' message={answerBot} />]);
+        setDisabled(false);
     }
 
     return (
@@ -44,6 +47,7 @@ export function Chatwindow() {
                                 handleSendMessage();
                             }
                         }}
+                        disabled={disabled}
                     />
                     <button className="send-button" onClick={handleSendMessage}>Enviar</button>
                 </div>
